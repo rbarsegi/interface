@@ -5,8 +5,8 @@ $ini_array = parse_ini_file("backend/config.ini");
 
 
 $serverResourceFile = "/var/ALQO/services/data/resources";
-$daemonConfigFile = $ini_array[confpath]
-$daemonFile = $ini_array[daemonpath]
+$daemonConfigFile = $ini_array['confpath'];
+$daemonFile = $ini_array['daemonpath'];
 $initialFile = "/var/ALQO/_initial";
 $passwordFile = "/var/ALQO/_webinterface_pw";
 $data['userID'] = "admin";
@@ -199,6 +199,7 @@ function restartDaemon()
 		print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
 		sleep(10);
 		print_r(exec('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit'));
+		print_r('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit');
 		die();
 	}
 }
