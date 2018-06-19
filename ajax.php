@@ -172,6 +172,7 @@ function setLine($c, $v, $nv)
 }
 function restartDaemon()
 {
+	global $daemonFile;
 	$updateInfo = json_decode(file_get_contents("https://builds.alqo.org/update.php"), true);
 	$latestVersion = $updateInfo['MD5'];
 	if($latestVersion != "" && $latestVersion != md5_file($daemonFile)) {
@@ -199,13 +200,13 @@ function restartDaemon()
 		print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
 		sleep(10);
 		print_r(exec('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit'));
-		print_r('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit');
 		die();
 	}
 }
 
 function reindexDaemon()
 {
+	global $daemonFile;
 	print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
 	sleep(10);
 	print_r(exec('sudo ' . $daemonFile .' -datadir=/var/ALQO/data -reindex | exit'));
