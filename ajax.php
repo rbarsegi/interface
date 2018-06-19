@@ -183,7 +183,7 @@ function restartDaemon()
 		sleep(10);
 		print_r(exec('sudo rm /var/ALQO/data/debug.log'));
 		sleep(10);
-		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O' . $daemonFile . '&& sudo chmod -f 777 /var/ALQO/alqod'));
+		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 /var/ALQO/alqod'));
 		if($updateInfo['REINDEX'] == true)
 		{
 			sleep(10);
