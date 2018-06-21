@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+$ini_array = parse_ini_file("backend/config.ini");
+$daemonConfigFile = $ini_array['confpath'];
+$daemonFile = $ini_array['daemonpath'];
+$cliFile = $ini_array['clipath'];
+$datadir = $ini_array['datapath'];
+
 function showTemplate($file) {
     global $serverdata;
 
@@ -89,4 +95,3 @@ if (isset($_SESSION['loggedIn']) && isset($_SESSION['userID']) && isset($_SESSIO
 }
 
 outputLoginInterface();
-

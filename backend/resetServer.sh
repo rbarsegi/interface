@@ -1,6 +1,6 @@
 #!/bin/bash
-
+source "/var/www/html/backend/configfile"
 shopt -s extglob
-cd /var/ALQO/data
-sudo rm -rf !(alqo.conf)
+cd "$datapath"
+sudo rm -rf !("$conffile")
 shopt -u extglob

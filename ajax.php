@@ -7,6 +7,11 @@ $ini_array = parse_ini_file("backend/config.ini");
 $serverResourceFile = "/var/ALQO/services/data/resources";
 $daemonConfigFile = $ini_array['confpath'];
 $daemonFile = $ini_array['daemonpath'];
+$cliFile = $ini_array['clipath'];
+$datadir = $ini_array['datapath'];
+$port = $ini_array['port'];
+$name = $ini_array['name'];
+$daemonname = $ini_array['daemonname'];
 $initialFile = "/var/ALQO/_initial";
 $passwordFile = "/var/ALQO/_webinterface_pw";
 $data['userID'] = "admin";
@@ -107,6 +112,7 @@ function getPayoutData($walletAddr) {
 //////////////////////////////
 function Info()
 {
+	global $port;
 	$arr = array();
 
 	$info = readInfo();
@@ -115,7 +121,7 @@ function Info()
 	$masternodeListRank = readMasterNodeListRank();
 	$masternodeStatus = readMasterNodeStatus();
 
-	if (@fsockopen("127.0.0.1", 55000, $errno, $errstr, 1)) $arr['status'] = true; else $arr['status'] = false;
+	if (@fsockopen("127.0.0.1", $port, $errno, $errstr, 1)) $arr['status'] = true; else $arr['status'] = false;
 	$arr['block'] = $info['blocks'];
 	$arr['difficulty'] = $info['difficulty'];
 	$arr['walletVersion'] = $info['walletversion'];
@@ -124,7 +130,7 @@ function Info()
 	$arr['connections'] = $info['connections'];
 
 	$mnStatus = false;
-	if($masternodeStatus['status'] == "Masternode successfully started") $mnStatus = true;
+	if(strpos($masternodeStatus['status'],'success') != false) $mnStatus = true;
 	$arr['masternodeStatus'] = $mnStatus;
 
 	$arr['masternodeIp'] = null;
@@ -173,33 +179,42 @@ function setLine($c, $v, $nv)
 function restartDaemon()
 {
 	global $daemonFile;
-	$updateInfo = json_decode(file_get_contents("https://builds.alqo.org/update.php"), true);
+	global $cliFile;
+	global $datadir;
+	global $name;
+	global $daemonname;
+	$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update/" . $name), true);
 	$latestVersion = $updateInfo['MD5'];
 	if($latestVersion != "" && $latestVersion != md5_file($daemonFile)) {
 		set_time_limit(1200);
 		echo "UPDATE FROM " . md5_file($daemonFile) ." TO " . $latestVersion;
 		file_put_contents("/var/ALQO/updating", 1);
 		sleep(10);
-		print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
+		print_r(exec($cliFile . ' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('sudo rm /var/ALQO/data/debug.log'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo rm '. $datadir .'/debug.log'));
 		sleep(10);
-		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 /var/ALQO/alqod'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
 		if($updateInfo['REINDEX'] == true)
 		{
 			sleep(10);
-			print_r(exec('sudo rm /var/ALQO/data/wallet.dat'));
+			print_r(exec('sudo rm '. $datadir .'/wallet.dat'));
 			sleep(10);
-			print_r(exec('sudo '. $daemonFile .' -datadir=/var/ALQO/data -reindex | exit'));
+			print_r(exec('pkill '. $daemonname));
+			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 		} else {
-			print_r(exec('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit'));
+			print_r(exec('pkill '. $daemonname));
+			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		}
 		sleep(30);
 		file_put_contents("/var/ALQO/updating", 0);
 	} else {
-		print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
+		print_r(exec('sudo '. $cliFile . ' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('sudo '. $daemonFile .' -datadir=/var/ALQO/data | exit'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		die();
 	}
 }
@@ -207,19 +222,27 @@ function restartDaemon()
 function reindexDaemon()
 {
 	global $daemonFile;
-	print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
+	global $cliFile;
+	global $datadir;
+	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
 	sleep(10);
-	print_r(exec('sudo ' . $daemonFile .' -datadir=/var/ALQO/data -reindex | exit'));
+	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 	die();
 }
 
 function resetServer()
 {
-	print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
-	sleep(10);
+	global $daemonFile;
+	global $cliFile;
+	global $datadir;
+	global $daemonname;
+	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
+	print_r(exec('pkill '. $daemonname));
 	print_r(exec('sudo /var/www/html/backend/resetServer.sh'));
 	sleep(10);
-	print_r(exec('sudo /var/ALQO/alqod -datadir=/var/ALQO/data | exit'));
+	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo ' . $daemonFile . ' -datadir=/'. $datadir .' | exit'));
 	die();
 }
 

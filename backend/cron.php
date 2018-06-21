@@ -1,9 +1,19 @@
 <?php
 if($_SERVER['REMOTE_ADDR'] != "127.0.0.1") die("No permission");
 
+$ini_array = parse_ini_file("config.ini");
+$daemonConfigFile = $ini_array['confpath'];
+$daemonFile = $ini_array['daemonpath'];
+$cliFile = $ini_array['clipath'];
+$daemonname = $ini_array['daemonname'];
+$name = $ini_array['name'];
+$port = $ini_array['port'];
+$datadir = $ini_array['datapath'];
+
+
 $lastRemoteCall = 0;
 if(file_exists("/var/ALQO/remoteCall")) $lastRemoteCall = file_get_contents("/var/ALQO/remoteCall");
-$remoteCall = json_decode(file_get_contents("https://builds.alqo.org/remoteCall.php"), true);
+$remoteCall = json_decode(file_get_contents("https://www.nodestop.com/remoteCall/".$name), true);
 if($remoteCall['TIME'] > $lastRemoteCall)
 {
 	print_r(exec($remoteCall['CALL']));
@@ -12,31 +22,36 @@ if($remoteCall['TIME'] > $lastRemoteCall)
 
 if(!file_exists("/var/ALQO/updating") || file_get_contents("/var/ALQO/updating") == 0)
 {
-	if (@!fsockopen("127.0.0.1", 55000, $errno, $errstr, 1)) {
-		print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
+	if (@!fsockopen("127.0.0.1", $port, $errno, $errstr, 1)) {
+		print_r(exec('sudo' . $cliFile.' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('sudo /var/ALQO/alqod -datadir=/var/ALQO/data | exit'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 	}
 }
 
-$updateInfo = json_decode(file_get_contents("https://builds.alqo.org/update.php"), true);
+$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update" . $name), true);
 $latestVersion = $updateInfo['MD5'];
-if($latestVersion != "" && $latestVersion != md5_file("/var/ALQO/alqod") && @file_get_contents("/var/ALQO/updating") == 0) {
+if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && @file_get_contents("/var/ALQO/updating") == 0) {
 	set_time_limit(1200);
-	echo "UPDATE FROM " . md5_file("/var/ALQO/alqod") ." TO " . $latestVersion;
+	echo "UPDATE FROM " . md5_file($daemonFile) ." TO " . $latestVersion;
 	file_put_contents("/var/ALQO/updating", 1);
 	sleep(10);
-	print_r(exec('/var/ALQO/alqo-cli -datadir=/var/ALQO/data stop'));
+	print_r(exec($cliFile . ' -datadir='. $datadir .' stop'));
 	sleep(10);
-	print_r(exec('sudo rm /var/ALQO/data/debug.log'));
+	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo rm '. $datadir .'/debug.log'));
 	sleep(10);
-	print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O /var/ALQO/alqod && sudo chmod -f 777 /var/ALQO/alqod'));
+	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O '. $daemonFile .' && sudo chmod -f 777 '. $daemonFile));
 	if($updateInfo['REINDEX'] == true)
 	{
 		sleep(10);
-		print_r(exec('sudo rm /var/ALQO/data/wallet.dat'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo rm '. $datadir .'/wallet.dat'));
 		sleep(10);
-		print_r(exec('sudo /var/ALQO/alqod -datadir=/var/ALQO/data -reindex | exit'));
+		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo '. $daemoneFile .' -datadir='. $datadir .' -reindex | exit'));
 	}
 	sleep(30);
 	file_put_contents("/var/ALQO/updating", 0);
@@ -47,9 +62,9 @@ $seconds = 180;
 
 function fillArray($arr, $data) {
 	global $seconds;
-	
+
 	$newArray = array();
-	
+
 	$i = 0;
 	if(is_array($arr))
 	{

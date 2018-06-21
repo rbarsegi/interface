@@ -74,8 +74,8 @@ $(document).ready(function () {
         ]
     };
 
-    var c3 = document.getElementById("barOptions").getContext("2d");
-    var chart = new Chart(c3, {type: 'bar', data: barData, options: payoutOptions});
+    // var c3 = document.getElementById("barOptions").getContext("2d");
+    // var chart = new Chart(c3, {type: 'bar', data: barData, options: payoutOptions});
 
     /*                                        .alqoswitch.enabled>span {
      background-color: #ee5b18 !important;
@@ -87,7 +87,7 @@ $(document).ready(function () {
      border-color: rgb(223, 223, 223);
      box-shadow: 0px 0px 0px 0px rgb(223, 223, 223) inset;
      }
-     
+
      */
 
 
@@ -148,7 +148,7 @@ $(document).ready(function () {
 
     function reverseString(inputstr){
         var newstring = "";
-        for (var i = inputstr.length - 1; i >= 0; i--) { 
+        for (var i = inputstr.length - 1; i >= 0; i--) {
             newstring += inputstr[i]; // or newString = newString + str[i];
         }
         return newstring;
@@ -165,7 +165,7 @@ $(document).ready(function () {
             $("#sys_genkey").html(tmpString);
         }
     }
-    
+
     $("#showGenkey").click(function(event){
         event.preventDefault();
         if ($("#sys_genkey").attr("data-show") == "true"){
@@ -177,13 +177,13 @@ $(document).ready(function () {
             $("#showGenkey").html("hide");
         }
         UpdateSysGenkey();
-        
+
     });
 
     function UpdateKey() {
         var retval = $.get("ajax.php", {getPrivKey: ""}, function (data) {
             data = reverseString(data);
-            $("#sys_genkey").attr("data-key",data);            
+            $("#sys_genkey").attr("data-key",data);
             UpdateSysGenkey();
             setTimeout(UpdateKey, 1000);
         });
@@ -351,13 +351,13 @@ $(document).ready(function () {
             strConnections = tmpJSON.connections;
             strMasternodeIP = tmpJSON.masternodeIp;
             strWalletBalance = tmpJSON.masternodeWalletBalance;
-            
+
             masternodepayoutdata = tmpJSON.masternodePayoutData;
             strCompletePayouts = masternodepayoutdata.overall;
             lastPayouts = masternodepayoutdata.lastPayouts;
             payoutsWeek = masternodepayoutdata.payouts;
 
-            $("#sys_balance").html(strWalletBalance);            
+            $("#sys_balance").html(strWalletBalance);
 
             switch (strDaemonStatus) {
                 case true:
@@ -391,27 +391,27 @@ $(document).ready(function () {
 
             var tmpLabels = [];
             var tmpNumbers = [];
-            payoutsWeek.forEach(function (item) {
-                tmpLabels.push(item[0]);
-                tmpNumbers.push(parseInt(item[1]));
-            });
+            // payoutsWeek.forEach(function (item) {
+            //     tmpLabels.push(item[0]);
+            //     tmpNumbers.push(parseInt(item[1]));
+            // });
 
-            chart.destroy();
-            $("#barOptions").html("");
-            barData = {
-                labels: tmpLabels,
-                datasets: [
-                    {
-                        label: "Payouts",
-                        backgroundColor: 'transparent',
-                        borderColor: "#ee5b18",
-                        borderWidth: 1,
-                        data: tmpNumbers
-                    }
-                ]
-            };
+            // chart.destroy();
+            // $("#barOptions").html("");
+            // barData = {
+            //     labels: tmpLabels,
+            //     datasets: [
+            //         {
+            //             label: "Payouts",
+            //             backgroundColor: 'transparent',
+            //             borderColor: "#ee5b18",
+            //             borderWidth: 1,
+            //             data: tmpNumbers
+            //         }
+            //     ]
+            // };
 
-            chart = new Chart(c3, {type: 'bar', data: barData, options: payoutOptions});
+            // chart = new Chart(c3, {type: 'bar', data: barData, options: payoutOptions});
 
             var tmpString = "";
             var date;
@@ -499,7 +499,7 @@ $(document).ready(function () {
         event.preventDefault();
         resetServer();
     });
-	
+
     $("#submit_masternodekey").click(function (event) {
         event.preventDefault();
         setPrivKey($("#mnKeyInput").val());
