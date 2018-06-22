@@ -183,7 +183,7 @@ function restartDaemon()
 	global $datadir;
 	global $name;
 	global $daemonname;
-	$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update/" . $name), true);
+	$updateInfo = json_decode(file_get_contents("https://www.google.com/" . $name), true);
 	$latestVersion = $updateInfo['MD5'];
 	if($latestVersion != "" && $latestVersion != md5_file($daemonFile)) {
 		set_time_limit(1200);
