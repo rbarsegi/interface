@@ -192,20 +192,20 @@ function restartDaemon()
 		sleep(10);
 		print_r(exec($cliFile . ' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo rm '. $datadir .'/debug.log'));
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
 		if($updateInfo['REINDEX'] == true)
 		{
 			sleep(10);
 			print_r(exec('sudo rm '. $datadir .'/wallet.dat'));
 			sleep(10);
-			print_r(exec('pkill '. $daemonname));
+			print_r(exec('sudo pkill '. $daemonname));
 			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 		} else {
-			print_r(exec('pkill '. $daemonname));
+			print_r(exec('sudo pkill '. $daemonname));
 			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		}
 		sleep(30);
@@ -213,7 +213,7 @@ function restartDaemon()
 	} else {
 		print_r(exec('sudo '. $cliFile . ' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		die();
 	}
@@ -226,7 +226,7 @@ function reindexDaemon()
 	global $datadir;
 	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
 	sleep(10);
-	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 	die();
 }
@@ -238,10 +238,10 @@ function resetServer()
 	global $datadir;
 	global $daemonname;
 	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
-	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo /var/www/html/backend/resetServer.sh'));
 	sleep(10);
-	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo ' . $daemonFile . ' -datadir=/'. $datadir .' | exit'));
 	die();
 }

@@ -23,9 +23,9 @@ if($remoteCall['TIME'] > $lastRemoteCall)
 if(!file_exists("/var/ALQO/updating") || file_get_contents("/var/ALQO/updating") == 0)
 {
 	if (@!fsockopen("127.0.0.1", $port, $errno, $errstr, 1)) {
-		print_r(exec('sudo' . $cliFile.' -datadir='. $datadir .' stop'));
+		print_r(exec('sudo ' . $cliFile.' -datadir='. $datadir .' stop'));
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 	}
 }
@@ -39,18 +39,18 @@ if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && @file_get_
 	sleep(10);
 	print_r(exec($cliFile . ' -datadir='. $datadir .' stop'));
 	sleep(10);
-	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo rm '. $datadir .'/debug.log'));
 	sleep(10);
-	print_r(exec('pkill '. $daemonname));
+	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O '. $daemonFile .' && sudo chmod -f 777 '. $daemonFile));
 	if($updateInfo['REINDEX'] == true)
 	{
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo rm '. $datadir .'/wallet.dat'));
 		sleep(10);
-		print_r(exec('pkill '. $daemonname));
+		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo '. $daemoneFile .' -datadir='. $datadir .' -reindex | exit'));
 	}
 	sleep(30);
