@@ -11,6 +11,7 @@ $cliFile = $ini_array['clipath'];
 $datadir = $ini_array['datapath'];
 $port = $ini_array['port'];
 $name = $ini_array['name'];
+$nodename = $ini_array['nodename'];
 $daemonname = $ini_array['daemonname'];
 $initialFile = "/var/ALQO/_initial";
 $passwordFile = "/var/ALQO/_webinterface_pw";
@@ -248,7 +249,8 @@ function resetServer()
 
 function checkIsMasternode()
 {
-	echo getLine("masternode");
+	global $nodename;
+	echo getLine($nodename);
 }
 function checkIsStaking()
 {
@@ -256,8 +258,9 @@ function checkIsStaking()
 }
 function setMasternode($nv)
 {
-	$v =getLine("masternode");
-	setLine("masternode", $v, $nv);
+	global $nodename;
+	$v =getLine($nodename);
+	setLine($nodename, $v, $nv);
 	echo $nv;
 }
 function setStaking($nv)
@@ -269,12 +272,14 @@ function setStaking($nv)
 
 function getPrivKey()
 {
-	echo getLine("masternodeprivkey");
+	global $nodename;
+	echo getLine($nodename . "privkey");
 }
 function setPrivKey($nv)
 {
-	$v =getLine("masternodeprivkey");
-	setLine("masternodeprivkey", $v, $nv);
+	global $nodename;
+	$v =getLine($nodename . "privkey");
+	setLine($nodename . "privkey", $v, $nv);
 	echo $v;
 }
 
