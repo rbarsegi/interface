@@ -17,6 +17,7 @@ $mstatus = stripslashes(file_get_contents("/var/ALQO/services/data/masternode_st
 
 if(isset($jsonmstatus["addr"])!=false) $currentaddress=$jsonmstatus["addr"];
 if(isset($jsonmstatus["pubkey"])!=false) $currentaddress=$jsonmstatus["pubkey"];
+if(isset($jsonmstatus["payee"])!=false) $currentaddress=$jsonmstatus["payee"];
 
 if ($setaddress != $currentaddress)
 {

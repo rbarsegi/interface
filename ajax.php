@@ -300,11 +300,22 @@ if(isset($_GET['initialCode'])) {
 if(isset($_GET['fresh'])) {
 	$genkey = getLine($nodename . "privkey");
 	if ($genkey == "" | $genkey == "0") {
-		print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey));
-		setPrivKey($newgenkey[0]);
-		setMasternode('1');
+		do {
+			sleep(10);
+			exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey);
+		} while(strpos($newgenkey,'connect')!=false);
+		
+		$v =getLine($nodename . "privkey");
+		setLine($nodename . "privkey", $v, $newgenkey[0]);
+
+		$v =getLine($nodename);
+		setLine($nodename, $v, '1');
 		exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop');
-		return $newgenkey;
+
+		sleep(10);
+		exec('sudo pkill '. $daemonname);
+		exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit');
+		echo $newgenkey[0];
 	}
 	die();
 }
