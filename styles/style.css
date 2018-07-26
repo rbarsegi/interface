@@ -67,20 +67,20 @@
 .btn-accent {
   color: #949ba2;
   background-color: transparent;
-  border-color: #ee5b18;
+  border-color: #159439;
 }
 .btn-accent:focus,
 .btn-accent.focus {
   color: #ffffff;
-  background-color: rgba(246, 168, 33, 0.1);
-  border-color: #ee5b18;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
   outline: 0;
   box-shadow: none;
 }
 .btn-accent:hover {
   color: #ffffff;
-  background-color: rgba(246, 168, 33, 0.1);
-  border-color: #ee5b18;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
 }
 .btn-accent:active,
 .btn-accent.active,
@@ -433,27 +433,27 @@ fieldset[disabled] .btn-warning.focus {
 .btn-danger {
   color: #949ba2;
   background-color: transparent;
-  border-color: #db524b;
+  border-color: #159439;
 }
 .btn-danger:focus,
 .btn-danger.focus {
   color: #ffffff;
-  background-color: rgba(219, 82, 75, 0.1);
-  border-color: #db524b;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
   outline: 0;
   box-shadow: none;
 }
 .btn-danger:hover {
   color: #ffffff;
-  background-color: rgba(219, 82, 75, 0.1);
-  border-color: #db524b;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
 }
 .btn-danger:active,
 .btn-danger.active,
 .open > .dropdown-toggle.btn-danger {
   color: #ffffff;
-  background-color: rgba(219, 82, 75, 0.1);
-  border-color: #db524b;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
 }
 .btn-danger:active:hover,
 .btn-danger.active:hover,
@@ -465,8 +465,8 @@ fieldset[disabled] .btn-warning.focus {
 .btn-danger.active.focus,
 .open > .dropdown-toggle.btn-danger.focus {
   color: #ffffff;
-  background-color: rgba(219, 82, 75, 0.1);
-  border-color: #e47b75;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
   outline: 0;
   box-shadow: none;
 }
@@ -484,8 +484,8 @@ fieldset[disabled] .btn-danger:focus,
 .btn-danger.disabled.focus,
 .btn-danger[disabled].focus,
 fieldset[disabled] .btn-danger.focus {
-  background-color: rgba(219, 82, 75, 0.1);
-  border-color: #db524b;
+  background-color: rgba(40, 193, 65, 0.1);
+  border-color: #159439;
 }
 .btn-danger .badge {
   color: transparent;
@@ -1058,10 +1058,10 @@ img.image-xl {
 }
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:focus {
-  width: 200px;
-  background-color: #ee5b18;
-  height: 60px;
-  padding: 20px 25px;
+  width: 5000px;
+  background-color: #000;
+  height: 70px;
+  padding: 4px 42px;
   font-weight: 400;
   letter-spacing: 10px;
   color: #FFFFFF;
@@ -1071,7 +1071,7 @@ img.image-xl {
 }
 .navbar-default .navbar-brand:hover {
   color: #FFFFFF;
-  background-color: #ff641d;
+  background-color: #000;
 }
 .navbar-brand span {
   letter-spacing: normal;
@@ -1257,7 +1257,7 @@ img.image-xl {
   border-left: 3px solid #949ba2;
 }
 .panel.panel-c-accent {
-  border-left: 2px solid #ee5b18;
+  border-left: 2px solid #18ee30;
 }
 .panel.panel-c-primary {
   border-left: 3px solid #0f83c9;

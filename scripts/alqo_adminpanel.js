@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     $(".masternode-switch").prop('checked', false);
     var elem2 = document.querySelector('.masternode-switch');
-    var init2 = new Switchery(elem2, {disabled: true, color: "#ee5b18", secondaryColor: "#efefef"});
+    var init2 = new Switchery(elem2, {disabled: true, color: "#18ee30", secondaryColor: "#efefef"});
     elem2.onchange = function () {
         plsRestartDaemon();
         setMasternodeEnable($(".masternode-switch").is(':checked'));
@@ -67,7 +67,7 @@ $(document).ready(function () {
             {
                 label: "Payouts",
                 backgroundColor: 'transparent',
-                borderColor: "#ee5b18",
+                borderColor: "#18ee30",
                 borderWidth: 1,
                 data: [0, 0, 0, 0, 0, 0, 0]
             }
@@ -78,9 +78,9 @@ $(document).ready(function () {
     // var chart = new Chart(c3, {type: 'bar', data: barData, options: payoutOptions});
 
     /*                                        .alqoswitch.enabled>span {
-     background-color: #ee5b18 !important;
-     border-color: #ee5b18 !important;
-     box-shadow: 0px 0px 0px 16px #ee5b18 inset !important;
+     background-color: #18ee30 !important;
+     border-color: #18ee30 !important;
+     box-shadow: 0px 0px 0px 16px #18ee30 inset !important;
      }
      .alqoswitch.disabled>span {
      background-color: rgb(255, 255, 255);
@@ -106,7 +106,7 @@ $(document).ready(function () {
             tickColor: "#484C5A",
             borderWidth: 0
         },
-        colors: ["#ee5b18"]
+        colors: ["#18ee30"]
     };
     var chartUsersOptions_RAM = {
         lines: {
@@ -121,7 +121,7 @@ $(document).ready(function () {
             tickColor: "#484C5A",
             borderWidth: 0
         },
-        colors: ["#ee5b18"]
+        colors: ["#18ee30"]
     };
 
     function updateCpuGraph(CpuData) {
@@ -205,7 +205,7 @@ $(document).ready(function () {
             if (isEnabled !== $(".masternode-switch").is(':checked')) {
                 $(".masternode-switch").prop('checked', isEnabled);
                 $(".masternode-switch").siblings().remove();
-                var init2 = new Switchery(elem2, {disabled: true, color: "#ee5b18", secondaryColor: "#efefef"});
+                var init2 = new Switchery(elem2, {disabled: true, color: "#18ee30", secondaryColor: "#efefef"});
                 elem2.onchange = function () {
                     plsRestartDaemon();
                     setMasternodeEnable($(".masternode-switch").is(':checked'));
@@ -404,7 +404,7 @@ $(document).ready(function () {
             //         {
             //             label: "Payouts",
             //             backgroundColor: 'transparent',
-            //             borderColor: "#ee5b18",
+            //             borderColor: "#18ee30",
             //             borderWidth: 1,
             //             data: tmpNumbers
             //         }

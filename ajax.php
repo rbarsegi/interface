@@ -297,6 +297,18 @@ if(isset($_GET['initialCode'])) {
 	die("false");
 }
 
+if(isset($_GET['fresh'])) {
+	$genkey = getLine($nodename . "privkey");
+	if ($genkey == "" | $genkey == "0") {
+		print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey));
+		setPrivKey($newgenkey[0]);
+		setMasternode('1');
+		exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop');
+		return $newgenkey;
+	}
+	die();
+}
+
 
 
 if(isset($_SESSION['loggedIn']) && isset($_SESSION['userID'])) {
