@@ -315,6 +315,8 @@ if(isset($_GET['fresh'])) {
 		sleep(10);
 		exec('sudo pkill '. $daemonname);
 		exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit');
+		sleep(10);
+		exec('/var/ALQO/data/services/service.sh');
 		echo $newgenkey[0];
 	}
 	die();
