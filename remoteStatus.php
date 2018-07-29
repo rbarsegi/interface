@@ -30,7 +30,7 @@ if ($setaddress != $currentaddress)
 
 exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true true', $balance);
 
-if(strpos(end($balance),'code')!==false || strpos(end($balance),'error')!==false)
+if(is_numeric(end($balance)) === false)
 {
 	exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true', $balance);
 }
