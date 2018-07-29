@@ -27,13 +27,19 @@ if ($setaddress != $currentaddress)
 	exec($cliFile . ' -datadir='. $datadir .' importaddress '. $currentaddress . ' true');
 }
 
-exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true', $balance);
+
+exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true true', $balance);
+
+if(strpos(end($balance),'code')!==false || strpos(end($balance),'error')!==false)
+{
+	exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true', $balance);
+}
 
 $return["status"] = $status;
 $return["version"] = $info["version"];
 $return["mstatus"] = $mstatus;
 $return["info"] = $info;
-$return["balance"] = $balance[0];
+$return["balance"] = end($balance);
 
 echo json_encode($return);
 

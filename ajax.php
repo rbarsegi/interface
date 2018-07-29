@@ -17,7 +17,7 @@ $initialFile = "/var/ALQO/_initial";
 $passwordFile = "/var/ALQO/_webinterface_pw";
 $data['userID'] = "admin";
 $data['userPass'] =  @file_get_contents($passwordFile);
-
+$genname = $ini_array['genname'];
 
 
 //////////////////////////////
@@ -297,16 +297,20 @@ if(isset($_GET['initialCode'])) {
 	die("false");
 }
 
+
 if(isset($_GET['fresh'])) {
 	$genkey = getLine($nodename . "privkey");
 	if ($genkey == "" | $genkey == "0") {
 		do {
 			sleep(10);
-			exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey);
-		} while(strpos($newgenkey,'connect')!=false);
+			if (isset($genname))
+				exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$genname .' genkey 2>&1',$newgenkey);
+			else
+				exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey);
+		} while(strpos(strtolower(end($newgenkey)),'connect')!==false || strpos(strtolower(end($newgenkey)),'loading')!==false || strpos(strtolower(end($genkey)),'response')!==false);
 		
 		$v =getLine($nodename . "privkey");
-		setLine($nodename . "privkey", $v, $newgenkey[0]);
+		setLine($nodename . "privkey", $v, end($newgenkey));
 
 		$v =getLine($nodename);
 		setLine($nodename, $v, '1');
@@ -314,10 +318,10 @@ if(isset($_GET['fresh'])) {
 
 		sleep(10);
 		exec('sudo pkill '. $daemonname);
-		exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit');
+		exec('sudo ' . $daemonFile .' -datadir='. $datadir .' | exit');
 		sleep(10);
 		exec('/var/ALQO/data/services/service.sh');
-		echo $newgenkey[0];
+		echo end($newgenkey);
 	}
 	die();
 }
