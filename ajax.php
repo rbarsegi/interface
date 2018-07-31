@@ -19,6 +19,7 @@ $data['userID'] = "admin";
 $data['userPass'] =  @file_get_contents($passwordFile);
 $genname = $ini_array['genname'];
 $manualkill = $ini_array['manualkill'];
+$ticker = $ini_array['ticker'];
 
 
 //////////////////////////////
@@ -185,7 +186,7 @@ function restartDaemon()
 	global $datadir;
 	global $name;
 	global $daemonname;
-	$updateInfo = json_decode(file_get_contents("https://www.google.com/"), true);
+	$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update/update/".$ticker), true);
 	$latestVersion = $updateInfo['MD5'];
 	if($latestVersion != "" && $latestVersion != md5_file($daemonFile)) {
 		set_time_limit(1200);
@@ -199,7 +200,9 @@ function restartDaemon()
 		sleep(10);
 		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo pkill -9 '. $manualkill));
-		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
+		print_r(exec('sudo wget ' . $updateInfo['DAEMONURL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
+		if(isset($updateInfo['CLIURL']))
+			print_r(exec('sudo wget ' . $updateInfo['CLIURL'] . ' -O '. $cliFile .' && sudo chmod -f 777 '. $cliFile));
 		if($updateInfo['REINDEX'] == true)
 		{
 			sleep(10);
