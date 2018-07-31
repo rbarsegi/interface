@@ -18,6 +18,7 @@ $passwordFile = "/var/ALQO/_webinterface_pw";
 $data['userID'] = "admin";
 $data['userPass'] =  @file_get_contents($passwordFile);
 $genname = $ini_array['genname'];
+$manualkill = $ini_array['manualkill'];
 
 
 //////////////////////////////
@@ -197,6 +198,7 @@ function restartDaemon()
 		print_r(exec('sudo rm '. $datadir .'/debug.log'));
 		sleep(10);
 		print_r(exec('sudo pkill '. $daemonname));
+		print_r(exec('sudo pkill -9 '. $manualkill));
 		print_r(exec('sudo wget ' . $updateInfo['URL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
 		if($updateInfo['REINDEX'] == true)
 		{
@@ -204,9 +206,13 @@ function restartDaemon()
 			print_r(exec('sudo rm '. $datadir .'/wallet.dat'));
 			sleep(10);
 			print_r(exec('sudo pkill '. $daemonname));
+			print_r(exec('sudo pkill -9 '. $manualkill));
+			print_r(exec('sudo rm /var/ALQO/data/.lock'));
 			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 		} else {
 			print_r(exec('sudo pkill '. $daemonname));
+			print_r(exec('sudo pkill -9 '. $manualkill));
+			print_r(exec('sudo rm /var/ALQO/data/.lock'));
 			print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		}
 		sleep(30);
@@ -215,6 +221,8 @@ function restartDaemon()
 		print_r(exec('sudo '. $cliFile . ' -datadir='. $datadir .' stop'));
 		sleep(10);
 		print_r(exec('sudo pkill '. $daemonname));
+		print_r(exec('sudo pkill -9 '. $manualkill));
+		print_r(exec('sudo rm /var/ALQO/data/.lock'));
 		print_r(exec('sudo '. $daemonFile .' -datadir='. $datadir .' | exit'));
 		die();
 	}
@@ -228,6 +236,8 @@ function reindexDaemon()
 	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
 	sleep(10);
 	print_r(exec('sudo pkill '. $daemonname));
+	print_r(exec('sudo pkill -9 '. $manualkill));
+	print_r(exec('sudo rm /var/ALQO/data/.lock'));
 	print_r(exec('sudo ' . $daemonFile .' -datadir='. $datadir .' -reindex | exit'));
 	die();
 }
@@ -240,9 +250,12 @@ function resetServer()
 	global $daemonname;
 	print_r(exec('sudo ' . $cliFile . ' -datadir='. $datadir .' stop'));
 	print_r(exec('sudo pkill '. $daemonname));
+	print_r(exec('sudo pkill -9 '. $manualkill));
 	print_r(exec('sudo /var/www/html/backend/resetServer.sh'));
 	sleep(10);
 	print_r(exec('sudo pkill '. $daemonname));
+	print_r(exec('sudo pkill -9 '. $manualkill));
+	print_r(exec('sudo rm /var/ALQO/data/.lock'));
 	print_r(exec('sudo ' . $daemonFile . ' -datadir=/'. $datadir .' | exit'));
 	die();
 }
@@ -308,7 +321,7 @@ if(isset($_GET['fresh'])) {
 			else
 				exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey);
 		} while(strpos(strtolower(end($newgenkey)),'connect')!==false || strpos(strtolower(end($newgenkey)),'loading')!==false || strpos(strtolower(end($genkey)),'response')!==false);
-		
+
 		$v =getLine($nodename . "privkey");
 		setLine($nodename . "privkey", $v, end($newgenkey));
 
@@ -318,6 +331,8 @@ if(isset($_GET['fresh'])) {
 
 		sleep(10);
 		exec('sudo pkill '. $daemonname);
+		print_r(exec('sudo pkill -9 '. $manualkill));
+		print_r(exec('sudo rm /var/ALQO/data/.lock'));
 		exec('sudo ' . $daemonFile .' -datadir='. $datadir .' | exit');
 		sleep(10);
 		exec('/var/ALQO/data/services/service.sh');
