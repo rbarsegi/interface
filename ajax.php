@@ -198,6 +198,8 @@ function restartDaemon()
 		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo rm '. $datadir .'/debug.log'));
 		sleep(10);
+		print_r(exec($updateInfo['ADDITIONALCMD']));
+		sleep(10);
 		print_r(exec('sudo pkill '. $daemonname));
 		print_r(exec('sudo pkill -9 '. $manualkill));
 		print_r(exec('sudo wget ' . $updateInfo['DAEMONURL'] . ' -O ' . $daemonFile . ' && sudo chmod -f 777 ' . $daemonFile));
@@ -259,7 +261,7 @@ function resetServer()
 	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo pkill -9 '. $manualkill));
 	print_r(exec('sudo rm /var/ALQO/data/.lock'));
-	print_r(exec('sudo ' . $daemonFile . ' -datadir=/'. $datadir .' | exit'));
+	restartDaemon();
 	die();
 }
 
