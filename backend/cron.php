@@ -45,7 +45,7 @@ $file = '/var/ALQO/updatetest';
 $handle = fopen($file, 'w') or die('Cannot open file:  '.$file); //implicitly creates file
 fwrite($handle, $updateInfo['DAEMONURL']);
 $latestVersion = $updateInfo['MD5'];
-if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && @file_get_contents("/var/ALQO/updating") == 0) {
+if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && $updateInfo['UPDATETIME'] <= time() && @file_get_contents("/var/ALQO/updating") == 0) {
 	set_time_limit(1200);
 	echo "UPDATE FROM " . md5_file($daemonFile) ." TO " . $latestVersion;
 	file_put_contents("/var/ALQO/updating", 1);
@@ -56,6 +56,8 @@ if($latestVersion != "" && $latestVersion != md5_file($daemonFile) && @file_get_
 	print_r(exec('sudo pkill -9 '. $manualkill));
 	print_r(exec('sudo rm /var/ALQO/data/.lock'));
 	print_r(exec('sudo rm '. $datadir .'/debug.log'));
+	sleep(10);
+	print_r(exec($updateInfo['ADDITIONALCMD']));
 	sleep(10);
 	print_r(exec('sudo pkill '. $daemonname));
 	print_r(exec('sudo pkill -9 '. $manualkill));
