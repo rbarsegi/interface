@@ -186,6 +186,7 @@ function restartDaemon()
 	global $datadir;
 	global $name;
 	global $daemonname;
+	global $ticker;
 	$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update/update/".$ticker), true);
 	$latestVersion = $updateInfo['MD5'];
 	if($latestVersion != "" && $latestVersion != md5_file($daemonFile)) {
