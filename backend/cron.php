@@ -40,7 +40,15 @@ if(!file_exists("/var/ALQO/updating") || file_get_contents("/var/ALQO/updating")
 	}
 }
 
-$updateInfo = json_decode(file_get_contents("https://www.nodestop.com/update/update/".$ticker), true);
+$updateFetch = json_decode(file_get_contents("https://www.nodestop.com/update/update/".$ticker), true);
+$osv = shell_exec('lsb_release --release | cut -f2 | cut -c 1,2');
+$osv = rtrim($osv);
+if(isset($updateFetch[$osv])) {
+	$updateInfo = $updateFetch[$osv];
+}
+else {
+	$updateInfo = $updateFetch;
+}
 $file = '/var/ALQO/updatetest';
 $handle = fopen($file, 'w') or die('Cannot open file:  '.$file); //implicitly creates file
 fwrite($handle, $updateInfo['DAEMONURL']);
