@@ -19,21 +19,6 @@ if(isset($jsonmstatus["addr"])!=false) $currentaddress=$jsonmstatus["addr"];
 if(isset($jsonmstatus["pubkey"])!=false) $currentaddress=$jsonmstatus["pubkey"];
 if(isset($jsonmstatus["payee"])!=false) $currentaddress=$jsonmstatus["payee"];
 
-if ($setaddress != $currentaddress)
-{
-	$file = '/var/ALQO/address';
-	$handle = fopen($file, 'w') or die('Cannot open file:  '.$file); //implicitly creates file
-	fwrite($handle, $currentaddress);
-	exec($cliFile . ' -datadir='. $datadir .' importaddress '. $currentaddress . ' true');
-}
-
-
-exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true true', $balance);
-
-if(is_numeric(end($balance)) === false)
-{
-	exec('sudo ' . $cliFile . ' -datadir='. $datadir . ' getbalance "*" 1 true', $balance);
-}
 
 $return["status"] = $status;
 $return["version"] = $info["version"];
