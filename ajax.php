@@ -337,7 +337,7 @@ if(isset($_GET['fresh'])) {
 				exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$genname .' genkey 2>&1',$newgenkey);
 			else
 				exec('sudo ' . $cliFile . ' -datadir='. $datadir .' '.$nodename .' genkey 2>&1',$newgenkey);
-		} while(strpos(strtolower(end($newgenkey)),'connect')!==false || strpos(strtolower(end($newgenkey)),'loading')!==false || strpos(strtolower(end($genkey)),'response')!==false);
+		} while(strpos(strtolower(end($newgenkey)),'connect')!==false || strpos(strtolower(end($newgenkey)),'loading')!==false || strpos(strtolower(end($genkey)),'response')!==false || strpos(strtolower(end($newgenkey)),'blocks')!==false || strpos(strtolower(end($newgenkey)),'wallet')!==false);
 
 		$v =getLine($nodename . "privkey");
 		setLine($nodename . "privkey", $v, end($newgenkey));
