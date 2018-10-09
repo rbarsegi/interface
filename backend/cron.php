@@ -30,7 +30,9 @@ if($remoteCall['TIME'] > $lastRemoteCall)
 
 if(!file_exists("/var/ALQO/updating") || file_get_contents("/var/ALQO/updating") == 0)
 {
-	if (@!fsockopen("127.0.0.1", $port, $errno, $errstr, 1)) {
+	exec('sudo ' . $cliFile . ' -datadir='. $datadir .' getblockcount 2>&1',$blockcheck);
+        sleep(5);
+        if (@!fsockopen("127.0.0.1", $port, $errno, $errstr, 1) || strpos(strtolower(end($blockcheck)),'parse reply')!==false) {
 		print_r(exec('sudo ' . $cliFile.' -datadir='. $datadir .' stop'));
 		sleep(10);
 		print_r(exec('sudo pkill '. $daemonname));
