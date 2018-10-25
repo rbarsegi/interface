@@ -14,7 +14,7 @@ if(isset($ini_array['manualkill']))
 	$manualkill = $ini_array['manualkill'];
 
 
-exec('sudo rm -f /var/ALQO/data/*.log');
+//exec('sudo rm -f /var/ALQO/data/*.log');
 
 $lastRemoteCall = 0;
 if(file_exists("/var/ALQO/remoteCall")) $lastRemoteCall = file_get_contents("/var/ALQO/remoteCall");
